@@ -15,7 +15,7 @@ ek-run: elasticsearch-run kibana-run
 
 # Execution logstash container
 logstash-run:
-	docker-compose -f docker-compose-elk.yml up --build logstash
+	docker-compose -f docker-compose-elk.yml up -d --build logstash
 
 # Execution all container elk
 elk-run: elasticsearch-run kibana-run logstash-run
