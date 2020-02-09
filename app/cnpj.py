@@ -202,22 +202,8 @@ def cnpj_full(input_list, tipo_output, output_path):
     for i_arq, arquivo in enumerate(input_list):
         print('Processando arquivo: {}'.format(arquivo))
 
-        dados = read_cfwf(arquivo, 
-                          type_width=1, 
-                          colspecs= {'0':header_colspecs,
-                                     '1':empresas_colspecs,
-                                     '2':socios_colspecs,
-                                     '6':CNAES_COLSPECS,
-                                     '9':trailler_colspecs},
-                          names={'0':header_colnomes,
-                                 '1':empresas_colnomes, 
-                                 '2':socios_colnomes,
-                                 '6':CNAES_COLNOMES,
-                                 '9':trailler_colnomes},
-                          dtype={'1': EMPRESAS_DTYPE,
-                                 '2': SOCIOS_DTYPE},
-                          chunksize=CHUNKSIZE,
-                          encoding='ISO-8859-15')
+        dados = read_data(arquivo, empresas_colnomes, empresas_colspecs, header_colnomes, header_colspecs,
+                          socios_colnomes, socios_colspecs, trailler_colnomes, trailler_colspecs)
 
         # Itera sobre blocos (chunks) do arquivo
         for i_bloco, bloco in enumerate(dados):
@@ -363,6 +349,27 @@ def cnpj_full(input_list, tipo_output, output_path):
 Arquivo SQLITE gerado: {}
 OBS: Uso de índices altamente recomendado!
               '''.format(os.path.join(output_path,NOME_ARQUIVO_SQLITE)))
+
+
+def read_data(arquivo, empresas_colnomes, empresas_colspecs, header_colnomes, header_colspecs, socios_colnomes,
+              socios_colspecs, trailler_colnomes, trailler_colspecs):
+    dados = read_cfwf(arquivo,
+                      type_width=1,
+                      colspecs={'0': header_colspecs,
+                                '1': empresas_colspecs,
+                                '2': socios_colspecs,
+                                '6': CNAES_COLSPECS,
+                                '9': trailler_colspecs},
+                      names={'0': header_colnomes,
+                             '1': empresas_colnomes,
+                             '2': socios_colnomes,
+                             '6': CNAES_COLNOMES,
+                             '9': trailler_colnomes},
+                      dtype={'1': EMPRESAS_DTYPE,
+                             '2': SOCIOS_DTYPE},
+                      chunksize=CHUNKSIZE,
+                      encoding='ISO-8859-15')
+    return dados
 
 
 def cnpj_index(output_path):
