@@ -9,5 +9,3 @@ if [ ${NO_INDEX} = 0 ]; then
   echo "Starting script..."
   python cnpj.py "${INPUT_PATH}" ${TYPE_OUTPUT} "${OUTPUT_PATH}"
 fi
-
-exec "$@"
