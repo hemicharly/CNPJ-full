@@ -199,22 +199,24 @@ def cnpj_full(input_list, tipo_output, output_path):
     trailler_colspecs = list(list(zip(*TRAILLER_COLUNAS))[1])
 
     # Itera sobre sequencia de arquivos (p/ suportar arquivo dividido pela RF)
-    for i_arq, arquivo in enumerate(input_list):
+    enum_input_list = enumerate(input_list)
+    for i_arq, arquivo in enum_input_list:
         print('Processando arquivo: {}'.format(arquivo))
 
         dados = read_data(arquivo, empresas_colnomes, empresas_colspecs, header_colnomes, header_colspecs,
                           socios_colnomes, socios_colspecs, trailler_colnomes, trailler_colspecs)
 
         # Itera sobre blocos (chunks) do arquivo
-        for i_bloco, bloco in enumerate(dados):
+        enum_dados = enumerate(dados)
+        for i_bloco, bloco in enum_dados:
             print('Bloco {}: até linha {}. [Emps:{}|Socios:{}|CNAEs:{}]'.format(i_bloco+1,
                                                                (i_bloco+1)*CHUNKSIZE,
                                                                total_empresas, 
                                                                total_socios, 
                                                                total_cnaes), 
                   end='\r')
-
-            for tipo_registro, df in bloco.items():
+            bloco_items = bloco.items()
+            for tipo_registro, df in bloco_items:
 
                 if tipo_registro == '1': # empresas
                     total_empresas += len(df)
@@ -270,7 +272,6 @@ def cnpj_full(input_list, tipo_output, output_path):
                     print('\nINFORMACOES DE CONTROLE:')
 
                     trailler = df.iloc[0,:]
-
                     controle_empresas = int(trailler['Total de registros de empresas'])
                     controle_socios = int(trailler['Total de registros de socios'])
                     controle_cnaes = int(trailler['Total de registros de CNAEs secundarios'])
