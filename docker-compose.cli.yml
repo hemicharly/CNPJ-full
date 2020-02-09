@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  cnpj-full-cli:
+    container_name: cnpj-full-cli
+    hostname: cnpj-full-cli
+    image: python/cnpj-full-cli
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    volumes:
+      - ./app:/app
