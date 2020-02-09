@@ -1,6 +1,11 @@
+# Build application python
+python-build:
+	docker-compose -f docker-compose.cli.yml build
+
 # Execution application python
+dcli-python=docker-compose -f docker-compose.cli.yml run cnpj-full-cli python cnpj.py
 python-run:
-	docker-compose up --build
+	$(dcli-python) "data" csv "database" --dir
 
 # Execution elasticsearch container
 elasticsearch-run:
@@ -23,3 +28,7 @@ logstash-stop:
 
 # Execution all container elk
 elk-run: elasticsearch-run kibana-run logstash-run
+
+# Stop all container elk
+elk-stop:
+	docker-compose -f docker-compose-elk.yml stop
