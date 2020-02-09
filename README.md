@@ -208,18 +208,19 @@ E dessa forma você pode também usar o grafo gerado (atributo "G" da classe) pa
 
 * Instalar docker;
 * Instalar docker-compose;
+* Instalar make;
 
 
 ##### Configurando a aplicação:
 
-* Faça uma copia do arquivo `docker-compose.override.yml.dist` com o nome `docker-compose.override.yml` e configure as váriaveis de ambiente;
+        
+* Para executar a aplicação execute os comandos:
 
-        environment:
-          INPUT_PATH: data/DADOS_ABERTOS_CNPJ.zip
-          TYPE_OUTPUT: sqlite
-          OUTPUT_PATH: database
-          NO_INDEX: 0
-          
-* Para executar a aplicação execute o comando:
 
-        docker-compose up --build
+| COMANDOS | DESCRIÇÃO |
+| --- | --- |
+| `make build` | Executar somente uma vez ou se realizar alguma alteração referente ao docker |
+| `make run-csv` | Executar para obter a saída de dados em formato csv |
+| `make run-sqlite` | Executar para obter a saída de dados em formato sqlite  |
+  
+        
