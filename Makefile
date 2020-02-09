@@ -1,11 +1,18 @@
 # Build application python
-python-build:
+build:
 	docker-compose -f docker-compose.cli.yml build
 
-# Execution application python
+
+# Command to execute application in container
 dcli-python=docker-compose -f docker-compose.cli.yml run cnpj-full-cli python cnpj.py
-python-run:
+
+# Execution application python using csv
+run-csv:
 	$(dcli-python) "data" csv "database" --dir
+
+# Execution application python using sqlite
+run-sqlite:
+	$(dcli-python) "data" sqlite "database" --dir
 
 # Execution elasticsearch container
 elasticsearch-run:
