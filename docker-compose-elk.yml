@@ -3,43 +3,41 @@ version: '3.7'
 services:
   elasticsearch:
     container_name: elasticsearch
-    hostname: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    image: elk/elasticsearch
+    build:
+      context: .
+      dockerfile: docker/elasticsearch/Dockerfile
     environment:
-      - cluster.name=es-cluster
-      - node.name=es-node-1
-      - path.data=/usr/share/elasticsearch/data
-      - http.port=9200
-      - http.host=0.0.0.0
-      - transport.host=127.0.0.1
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xmx2G -Xms2G -Duser.timezone=GMT-3"
-    networks:
-      - elk_stack
+      ES_JAVA_OPTS: "-Xmx2G -Xms2G -Duser.timezone=GMT-3"
+      ELASTIC_PASSWORD: bhut@2020
     ports:
       - 9200:9200
+    networks:
+      - elk_stack
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
 
   kibana:
     container_name: kibana
-    hostname: kibana
-    image: docker.elastic.co/kibana/kibana:7.5.2
-    environment:
-    - server.port=127.0.0.1:5601
-    - elasticsearch.url="http://elasticsearch:9200"
-    - server.name="kibana"
+    image: elk/kibana
+    build:
+      context: .
+      dockerfile: docker/kibana/Dockerfile
     ports:
-    - 5601:5601
+      - 5601:5601
     networks:
       - elk_stack
     depends_on:
       - elasticsearch
 
   logstash:
+    container_name: logstash
+    image: elk/logstash
     build:
       context: .
       dockerfile: docker/logstash/Dockerfile
-    volumes:
-      - ./app/database:/usr/share/logstash/logread
+    environment:
+      LS_JAVA_OPTS: "-Xmx2G -Xms2G -Duser.timezone=GMT-3"
     ports:
       - 5000:5000
       - 9600:9600
@@ -47,8 +45,11 @@ services:
       - elk_stack
     depends_on:
       - elasticsearch
-    environment:
-      LS_JAVA_OPTS: "-Xmx2G -Xms2G -Duser.timezone=GMT-3"
+    volumes:
+      - ./app/database:/usr/share/logstash/logread
+
+volumes:
+  elasticsearch-data:
 
 networks:
   elk_stack:
