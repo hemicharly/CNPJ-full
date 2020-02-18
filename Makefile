@@ -34,8 +34,12 @@ logstash-stop:
 	docker-compose -f docker-compose-elk.yml stop logstash
 
 # Execution all container elk
-elk-run: elasticsearch-run kibana-run logstash-run
+elk-run:
+	docker-compose -f docker-compose-elk.yml up -d --build
 
 # Stop all container elk
 elk-stop:
 	docker-compose -f docker-compose-elk.yml stop
+
+# Restart all container elk
+elk-restart: elk-stop elk-run
