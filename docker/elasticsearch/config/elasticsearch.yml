@@ -1,0 +1,13 @@
+cluster.name: "docker-cluster"
+node.name: "es-node-1"
+
+http.host: "0.0.0.0"
+http.port: 9200
+
+discovery.type: single-node
+transport.host: 127.0.0.1
+bootstrap.memory_lock: true
+
+xpack.license.self_generated.type: trial
+xpack.security.enabled: true
+xpack.monitoring.collection.enabled: true
